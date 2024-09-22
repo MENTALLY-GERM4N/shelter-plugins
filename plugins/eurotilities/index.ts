@@ -13,6 +13,7 @@ export function onLoad() {
 					...modules[module],
 					title: `${modules[module].title} - Enabled`,
 					content: null,
+					duration: 0,
 				});
 			}
 		}
