@@ -1,14 +1,10 @@
-# [Your name here]'s shelter plugins
-If you're reading this you should either change this README,
-or you should run `npx degit uwu/shelter-template shelter-plugins`!
+# S€th's shelter plugins
 
 ## Getting started
-You should be using [pnpm](https://pnpm.io/) with this template ideally.
-
-To install the dependencies and debug `hello-world` run:
+To install the dependencies and debug `euro-template` run:
 ```sh
-pnpm i 
-pnpm lune dev plugins/hello-world
+bun i 
+bun lune dev plugins/euro-template
 ```
 
 Ensure that Lune Dev Mode is enabled in Discord so that lune can connect to it.
@@ -21,8 +17,8 @@ To then install your finished plugin in shelter you can either rely on GitHub pa
 ### Building locally
 To build and host your plugins locally run:
 ```sh
-pnpm lune ci
-npx http-server dist/ --cors
+bun lune ci
+bunx http-server dist/ --cors
 ```
 Then you can install your plugin in shelter with this URL `http://localhost:8080/hello-world`.
 
@@ -34,4 +30,4 @@ For the GitHub action to run flawlessly, make sure you have the following settin
 
 And for it to be hosted correctly you need to configure the `gh-pages` branch after its been created by the GitHub action. You can do this in `Repo settings > Pages > Branch`.
 
-If this worked, you will be able to install the plugin via `https://<username>.github.io/<repo>/hello-world`.
+If this worked, you will be able to install the plugin via `https://wont-stream.github.io/shelter-addons/hello-world`.
