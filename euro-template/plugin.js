@@ -17,9 +17,9 @@
   };
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // plugins/hello-world/index.tsx
-  var hello_world_exports = {};
-  __export(hello_world_exports, {
+  // plugins/euro-template/index.tsx
+  var euro_template_exports = {};
+  __export(euro_template_exports, {
     onLoad: () => onLoad,
     onUnload: () => onUnload
   });
@@ -34,5 +34,5 @@
   function onUnload() {
     log("Goodbye, World from shelter!");
   }
-  return __toCommonJS(hello_world_exports);
+  return __toCommonJS(euro_template_exports);
 })();
