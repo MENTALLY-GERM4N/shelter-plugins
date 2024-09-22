@@ -17,16 +17,14 @@
   };
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // plugins/euro-template/index.tsx
+  // plugins/euro-template/index.ts
   var euro_template_exports = {};
   __export(euro_template_exports, {
     onLoad: () => onLoad,
     onUnload: () => onUnload
   });
   var {
-    util: {
-      log
-    }
+    util: { log }
   } = shelter;
   function onLoad() {
     log("Hello, World from shelter!");
