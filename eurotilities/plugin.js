@@ -421,12 +421,13 @@
           showToast({
             ...modules_default[module],
             title: `${modules_default[module].title} - Disabled`,
-            content: null
+            content: null,
+            duration: 0
           });
         } else {
           showToast({
             ...modules_default[module],
-            title: `${modules_default[module].title} - Not Disabled`,
+            title: "Restat Required",
             content: `${modules_default[module].title} requires a restart to disable.`,
             onClick() {
               location.reload();
