@@ -6,7 +6,7 @@ const {
 
 export function onLoad() {
 	for (const module of Object.keys(modules)) {
-		modules[module].start();
+		modules[module]();
 	}
 }
 

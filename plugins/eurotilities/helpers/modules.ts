@@ -1,6 +1,5 @@
 import alwaysTrust from "../modules/alwaysTrust.ts";
 import antiTrack from "../modules/antiTrack.ts";
-import colorSighted from "../modules/colorSighted.ts";
 import muteNewGuild from "../modules/muteNewGuild.ts";
 import noCallIdle from "../modules/noCallIdle.ts";
 import noConsoleSpam from "../modules/noConsoleSpam.ts";
@@ -15,7 +14,6 @@ import timestampedFiles from "../modules/timestampedFiles.ts";
 export default {
 	alwaysTrust,
 	antiTrack,
-	colorSighted,
 	muteNewGuild,
 	noCallIdle,
 	noConsoleSpam,
