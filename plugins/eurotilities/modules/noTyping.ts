@@ -7,7 +7,5 @@ export default {
 	start: () => {
 		// @ts-ignore
 		intercept("post", /.*typing$/, () => {});
-
-		return true;
 	},
 };

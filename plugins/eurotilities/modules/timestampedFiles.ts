@@ -1,14 +1,11 @@
 const { flux } = shelter;
 const { intercept } = flux;
 
-// biome-ignore lint/complexity/noBannedTypes: N/A
-let unintercept: Function | null = null;
-
 export default {
 	title: "Timestamped Files",
 	content: "Rename uploaded files to the current timestamp.",
 	start: () => {
-		unintercept = intercept((dispatch) => {
+		intercept((dispatch) => {
 			if (dispatch?.type === "UPLOAD_ATTACHMENT_ADD_FILES") {
 				for (const { file } of dispatch?.files ?? []) {
 					if (!file?.name) continue;
@@ -26,7 +23,5 @@ export default {
 				return dispatch;
 			}
 		});
-
-		return true;
 	},
 };
