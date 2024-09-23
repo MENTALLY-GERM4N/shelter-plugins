@@ -21,7 +21,6 @@ export default {
 	noNitroUpsell,
 	noReplyMention,
 	noTyping,
-	noTypingAnimation,
 	steamStatusSync,
 	timestampedFiles,
 };
