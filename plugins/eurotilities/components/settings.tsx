@@ -3,8 +3,6 @@ import modules from "../helpers/modules.ts";
 const {
 	plugin: { store },
 	ui: {
-		Header,
-		HeaderTags,
 		Divider,
 		SwitchItem,
 		openModal,
