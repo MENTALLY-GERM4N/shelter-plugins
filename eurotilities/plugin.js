@@ -459,8 +459,6 @@
       store
     },
     ui: {
-      Header,
-      HeaderTags,
       Divider,
       SwitchItem,
       openModal,
