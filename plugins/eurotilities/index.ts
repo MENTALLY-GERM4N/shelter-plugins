@@ -1,15 +1,12 @@
 import modules from "./helpers/modules.ts";
 
 const {
-	plugin: { store },
 	ui: { showToast },
 } = shelter;
 
 export function onLoad() {
-	for (const module of Object.keys(store)) {
-		if (store[module]) {
-			modules[module].start();
-		}
+	for (const module of Object.keys(modules)) {
+		modules[module].start();
 	}
 }
 
@@ -23,5 +20,3 @@ export function onUnload() {
 		duration: Number.POSITIVE_INFINITY,
 	});
 }
-
-export * from "./components/settings.tsx";
