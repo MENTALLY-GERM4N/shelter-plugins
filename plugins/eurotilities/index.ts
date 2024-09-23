@@ -1,7 +1,7 @@
 import modules from "./helpers/modules.ts";
 
 const {
-	plugin: { store, showSettings },
+	plugin: { store },
 	ui: { showToast },
 } = shelter;
 
@@ -11,8 +11,6 @@ export function onLoad() {
 			modules[module].start();
 		}
 	}
-
-	showSettings();
 }
 
 export function onUnload() {
