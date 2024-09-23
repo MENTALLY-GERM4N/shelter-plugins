@@ -28,11 +28,12 @@ export function onUnload() {
 					...modules[module],
 					title: `${modules[module].title} - Disabled`,
 					content: null,
+					duration: 0,
 				});
 			} else {
 				showToast({
 					...modules[module],
-					title: `${modules[module].title} - Not Disabled`,
+					title: "Restat Required",
 					content: `${modules[module].title} requires a restart to disable.`,
 					onClick() {
 						location.reload();
