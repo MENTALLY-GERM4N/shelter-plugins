@@ -197,7 +197,6 @@
   var colorSighted_default = {
     title: "Color Sighted",
     content: "Remove the colorblind-friendly icons from statuses.",
-    //url(#svg-mask-avatar-status-mobile-32)
     start: () => {
       document.head.appendChild(style);
       Masks.STATUS_DND = masks.STATUS_ONLINE;
@@ -239,24 +238,35 @@
   };
 
   // plugins/eurotilities/modules/noNitroUpsell.ts
-  var { flux } = shelter;
+  var { flux, util } = shelter;
+  var { awaitDispatch } = util;
   var { awaitStore } = flux;
+  var getUser = async () => {
+    const UserStore = await awaitStore("UserStore", true);
+    const { getCurrentUser } = UserStore;
+    let user = getCurrentUser();
+    if (!user) {
+      await awaitDispatch("CONNECTION_OPEN");
+      user = getCurrentUser();
+    }
+    return user;
+  };
   var noNitroUpsell_default = {
     title: "No Nitro Upsell",
     content: "Remove ALL of Discord's nitro upsells by tricking the client into thinking you have nitro.",
     start: () => {
-      awaitStore("UserStore", true).then((UserStore) => {
-        const { getCurrentUser } = UserStore;
-        getCurrentUser()._eurotilities__premiumType = getCurrentUser().premiumType;
-        getCurrentUser().premiumType = 2;
-      });
+      (async () => {
+        const user = await getUser();
+        user._eurotilities__premiumType = user.premiumType;
+        user.premiumType = 2;
+      })();
       return true;
     },
     stop: () => {
-      awaitStore("UserStore", true).then((UserStore) => {
-        const { getCurrentUser } = UserStore;
-        getCurrentUser().premiumType = getCurrentUser()._eurotilities__premiumType;
-      });
+      (async () => {
+        const user = await getUser();
+        user.premiumType = user._eurotilities__premiumType;
+      })();
       return true;
     }
   };
