@@ -40,7 +40,6 @@ style.textContent = `[mask="url(#svg-mask-status-online)"] { width: 10px; height
 export default {
 	title: "Color Sighted",
 	content: "Remove the colorblind-friendly icons from statuses.",
-	//url(#svg-mask-avatar-status-mobile-32)
 	start: () => {
 		document.head.appendChild(style);
 		Masks.STATUS_DND = masks.STATUS_ONLINE;
