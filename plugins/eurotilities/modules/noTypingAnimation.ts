@@ -5,7 +5,5 @@ export default {
 		document.hasFocus = () => {
 			return false;
 		};
-		return true;
 	},
-	stop: () => false,
 };

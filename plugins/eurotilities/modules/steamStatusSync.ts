@@ -26,10 +26,5 @@ export default {
 	content: "Sync your Steam Status to your Discord Status.",
 	start: () => {
 		dispatcher.subscribe("USER_SETTINGS_PROTO_UPDATE", listener);
-		return true;
-	},
-	stop: () => {
-		dispatcher.unsubscribe("USER_SETTINGS_PROTO_UPDATE", listener);
-		return true;
 	},
 };

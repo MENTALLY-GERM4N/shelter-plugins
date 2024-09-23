@@ -30,21 +30,10 @@ export default {
 	title: "No Nitro Upsell",
 	content:
 		"Remove ALL of Discord's nitro upsells by tricking the client into thinking you have nitro.",
-	start: () => {
-		(async () => {
-			const user = await getUser();
+	start: async () => {
+		const user = await getUser();
 
-			user._eurotilities__premiumType = user.premiumType;
-			user.premiumType = 2;
-		})();
-		return true;
-	},
-	stop: () => {
-		(async () => {
-			const user = await getUser();
-
-			user.premiumType = user._eurotilities__premiumType;
-		})();
-		return true;
+		user._eurotilities__premiumType = user.premiumType;
+		user.premiumType = 2;
 	},
 };
