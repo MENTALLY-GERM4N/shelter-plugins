@@ -7,7 +7,6 @@ import noDevtoolsDetection from "../modules/noDevtoolsDetection.ts";
 import noNitroUpsell from "../modules/noNitroUpsell.ts";
 import noReplyMention from "../modules/noReplyMention.ts";
 import noTyping from "../modules/noTyping.ts";
-import noTypingAnimation from "../modules/noTypingAnimation.ts";
 import steamStatusSync from "../modules/steamStatusSync.ts";
 import timestampedFiles from "../modules/timestampedFiles.ts";
 
