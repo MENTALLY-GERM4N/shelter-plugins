@@ -45,6 +45,38 @@
     settings: () => settings
   });
 
+  // plugins/eurotilities/modules/alwaysTrust.ts
+  var { flux, patcher } = shelter;
+  var { stores } = flux;
+  var { instead } = patcher;
+  var { MaskedLinkStore } = stores;
+  var alwaysTrust_default = {
+    title: "Always Trust",
+    content: 'Remove the "You are leaving Discord" popup.',
+    start: () => {
+      instead("isTrustedDomain", MaskedLinkStore, () => true, false);
+    }
+  };
+
+  // plugins/eurotilities/modules/antiTrack.ts
+  var { http } = shelter;
+  var { intercept } = http;
+  var antiTrack_default = {
+    title: "Anti Track",
+    content: "Stop some tracking, not all.",
+    start: () => {
+      try {
+        window.__SENTRY__.hub.getClient().getOptions().enabled = false;
+        for (const x of Object.keys(console)) {
+          console[x] = console[x].__sentry_original__ ?? console[x];
+        }
+      } catch {
+      }
+      intercept("post", /^\/science|^\/error-reporting-proxy/, () => {
+      });
+    }
+  };
+
   // plugins/eurotilities/helpers/webpack.ts
   var wreq;
   var cache;
@@ -163,34 +195,6 @@
 
   // plugins/eurotilities/modules/colorSighted.ts
   var { Masks } = findByProps("Masks");
-  var masks = {
-    STATUS_ONLINE: Masks.STATUS_ONLINE,
-    STATUS_IDLE: Masks.STATUS_IDLE,
-    STATUS_DND: Masks.STATUS_DND,
-    STATUS_OFFLINE: Masks.STATUS_OFFLINE,
-    STATUS_STREAMING: Masks.STATUS_STREAMING,
-    STATUS_ONLINE_MOBILE: Masks.STATUS_ONLINE_MOBILE,
-    AVATAR_STATUS_ROUND_16: Masks.AVATAR_STATUS_ROUND_16,
-    AVATAR_STATUS_ROUND_20: Masks.AVATAR_STATUS_ROUND_20,
-    AVATAR_STATUS_ROUND_24: Masks.AVATAR_STATUS_ROUND_24,
-    AVATAR_STATUS_ROUND_32: Masks.AVATAR_STATUS_ROUND_32,
-    AVATAR_STATUS_ROUND_40: Masks.AVATAR_STATUS_ROUND_40,
-    AVATAR_STATUS_ROUND_48: Masks.AVATAR_STATUS_ROUND_48,
-    AVATAR_STATUS_ROUND_56: Masks.AVATAR_STATUS_ROUND_56,
-    AVATAR_STATUS_ROUND_80: Masks.AVATAR_STATUS_ROUND_80,
-    AVATAR_STATUS_ROUND_100: Masks.AVATAR_STATUS_ROUND_100,
-    AVATAR_STATUS_ROUND_120: Masks.AVATAR_STATUS_ROUND_120,
-    AVATAR_STATUS_MOBILE_16: Masks.AVATAR_STATUS_MOBILE_16,
-    AVATAR_STATUS_MOBILE_20: Masks.AVATAR_STATUS_MOBILE_20,
-    AVATAR_STATUS_MOBILE_24: Masks.AVATAR_STATUS_MOBILE_24,
-    AVATAR_STATUS_MOBILE_32: Masks.AVATAR_STATUS_MOBILE_32,
-    AVATAR_STATUS_MOBILE_40: Masks.AVATAR_STATUS_MOBILE_40,
-    AVATAR_STATUS_MOBILE_48: Masks.AVATAR_STATUS_MOBILE_48,
-    AVATAR_STATUS_MOBILE_56: Masks.AVATAR_STATUS_MOBILE_56,
-    AVATAR_STATUS_MOBILE_80: Masks.AVATAR_STATUS_MOBILE_80,
-    AVATAR_STATUS_MOBILE_100: Masks.AVATAR_STATUS_MOBILE_100,
-    AVATAR_STATUS_MOBILE_120: Masks.AVATAR_STATUS_MOBILE_120
-  };
   var style = document.createElement("style");
   style.id = "__eurotilities-moduleStyle_color-sighted";
   style.textContent = `[mask="url(#svg-mask-status-online)"] { width: 10px; height: 10px; x: 22px; y: 22px; }`;
@@ -199,48 +203,116 @@
     content: "Remove the colorblind-friendly icons from statuses.",
     start: () => {
       document.head.appendChild(style);
-      Masks.STATUS_DND = masks.STATUS_ONLINE;
-      Masks.STATUS_IDLE = masks.STATUS_ONLINE;
-      Masks.STATUS_OFFLINE = masks.STATUS_ONLINE;
-      Masks.STATUS_STREAMING = masks.STATUS_ONLINE;
-      Masks.STATUS_ONLINE_MOBILE = masks.STATUS_ONLINE;
-      Masks.AVATAR_STATUS_MOBILE_16 = masks.AVATAR_STATUS_ROUND_16;
-      Masks.AVATAR_STATUS_MOBILE_20 = masks.AVATAR_STATUS_ROUND_20;
-      Masks.AVATAR_STATUS_MOBILE_24 = masks.AVATAR_STATUS_ROUND_24;
-      Masks.AVATAR_STATUS_MOBILE_32 = masks.AVATAR_STATUS_ROUND_32;
-      Masks.AVATAR_STATUS_MOBILE_40 = masks.AVATAR_STATUS_ROUND_40;
-      Masks.AVATAR_STATUS_MOBILE_48 = masks.AVATAR_STATUS_ROUND_48;
-      Masks.AVATAR_STATUS_MOBILE_56 = masks.AVATAR_STATUS_ROUND_56;
-      Masks.AVATAR_STATUS_MOBILE_80 = masks.AVATAR_STATUS_ROUND_80;
-      Masks.AVATAR_STATUS_MOBILE_100 = masks.AVATAR_STATUS_ROUND_100;
-      Masks.AVATAR_STATUS_MOBILE_120 = masks.AVATAR_STATUS_ROUND_120;
-      return true;
-    },
-    stop: () => {
-      document.head.removeChild(style);
-      Masks.STATUS_DND = masks.STATUS_DND;
-      Masks.STATUS_IDLE = masks.STATUS_IDLE;
-      Masks.STATUS_OFFLINE = masks.STATUS_OFFLINE;
-      Masks.STATUS_STREAMING = masks.STATUS_STREAMING;
-      Masks.STATUS_ONLINE_MOBILE = masks.STATUS_ONLINE_MOBILE;
-      Masks.AVATAR_STATUS_MOBILE_16 = masks.AVATAR_STATUS_MOBILE_16;
-      Masks.AVATAR_STATUS_MOBILE_20 = masks.AVATAR_STATUS_MOBILE_20;
-      Masks.AVATAR_STATUS_MOBILE_24 = masks.AVATAR_STATUS_MOBILE_24;
-      Masks.AVATAR_STATUS_MOBILE_32 = masks.AVATAR_STATUS_MOBILE_32;
-      Masks.AVATAR_STATUS_MOBILE_40 = masks.AVATAR_STATUS_MOBILE_40;
-      Masks.AVATAR_STATUS_MOBILE_48 = masks.AVATAR_STATUS_MOBILE_48;
-      Masks.AVATAR_STATUS_MOBILE_56 = masks.AVATAR_STATUS_MOBILE_56;
-      Masks.AVATAR_STATUS_MOBILE_80 = masks.AVATAR_STATUS_MOBILE_80;
-      Masks.AVATAR_STATUS_MOBILE_100 = masks.AVATAR_STATUS_MOBILE_100;
-      Masks.AVATAR_STATUS_MOBILE_120 = masks.AVATAR_STATUS_MOBILE_120;
-      return true;
+      Masks.STATUS_DND = Masks.STATUS_ONLINE;
+      Masks.STATUS_IDLE = Masks.STATUS_ONLINE;
+      Masks.STATUS_OFFLINE = Masks.STATUS_ONLINE;
+      Masks.STATUS_STREAMING = Masks.STATUS_ONLINE;
+      Masks.STATUS_ONLINE_MOBILE = Masks.STATUS_ONLINE;
+      Masks.AVATAR_STATUS_MOBILE_16 = Masks.AVATAR_STATUS_ROUND_16;
+      Masks.AVATAR_STATUS_MOBILE_20 = Masks.AVATAR_STATUS_ROUND_20;
+      Masks.AVATAR_STATUS_MOBILE_24 = Masks.AVATAR_STATUS_ROUND_24;
+      Masks.AVATAR_STATUS_MOBILE_32 = Masks.AVATAR_STATUS_ROUND_32;
+      Masks.AVATAR_STATUS_MOBILE_40 = Masks.AVATAR_STATUS_ROUND_40;
+      Masks.AVATAR_STATUS_MOBILE_48 = Masks.AVATAR_STATUS_ROUND_48;
+      Masks.AVATAR_STATUS_MOBILE_56 = Masks.AVATAR_STATUS_ROUND_56;
+      Masks.AVATAR_STATUS_MOBILE_80 = Masks.AVATAR_STATUS_ROUND_80;
+      Masks.AVATAR_STATUS_MOBILE_100 = Masks.AVATAR_STATUS_ROUND_100;
+      Masks.AVATAR_STATUS_MOBILE_120 = Masks.AVATAR_STATUS_ROUND_120;
+    }
+  };
+
+  // plugins/eurotilities/modules/muteNewGuild.ts
+  var { flux: flux2, http: http2 } = shelter;
+  var { dispatcher } = flux2;
+  var { patch } = http2;
+  var muteNewGuild_default = {
+    title: "Mute New Guilds",
+    content: "Auto mute guilds on join.",
+    start: () => {
+      dispatcher.subscribe(
+        "INVITE_ACCEPT_SUCCESS",
+        ({
+          invite: {
+            guild: { id }
+          }
+        }) => {
+          if (patch) {
+            patch({
+              body: {
+                muted: true,
+                suppress_everyone: true,
+                suppress_roles: true
+              },
+              url: `/users/@me/guilds/${id}/settings`,
+              oldFormErrors: false
+            });
+          }
+        }
+      );
+    }
+  };
+
+  // plugins/eurotilities/modules/noCallIdle.ts
+  var { flux: flux3 } = shelter;
+  var { intercept: intercept2, dispatcher: dispatcher2 } = flux3;
+  var dispatchTypes = ["EMBEDDED_ACTIVITY_DISCONNECT", "VOICE_STATE_UPDATES"];
+  var noCallIdle_default = {
+    title: "No Call Idle",
+    content: "Stay in VC forever.",
+    start: () => {
+      intercept2(({ type }) => {
+        if (dispatchTypes.includes(type)) {
+          const actionHandlers = dispatcher2._subscriptions[type] ?? [];
+          for (const handler of actionHandlers) {
+            if (handler.toString().includes("idleTimeout.start")) {
+              actionHandlers.delete(handler);
+            }
+          }
+        }
+      });
+    }
+  };
+
+  // plugins/eurotilities/modules/noConsoleSpam.ts
+  var originalConsoleMethods = {};
+  var noConsoleSpam_default = {
+    title: "No Console Spam",
+    content: "Filter the console spam.",
+    start: () => {
+      for (const method of Object.keys(console)) {
+        originalConsoleMethods[method] = console[method];
+        console[method] = (...args) => {
+          const message = args[0];
+          if (typeof message === "string" && (message.includes("%c[") || message.toLowerCase().includes("sentry"))) {
+            return;
+          }
+          originalConsoleMethods[method].apply(console, args);
+        };
+      }
+    }
+  };
+
+  // plugins/eurotilities/modules/noDevtoolsDetection.ts
+  var nativeWindow = window;
+  var noDevtoolsDetection_default = {
+    title: "No Devtools Detection",
+    content: "Prevent annoying devtools detection. (Desktop only)",
+    start: () => {
+      if (nativeWindow.DiscordNative) {
+        nativeWindow.DiscordNative.window.setDevtoolsCallbacks(
+          () => {
+          },
+          () => {
+          }
+        );
+      }
     }
   };
 
   // plugins/eurotilities/modules/noNitroUpsell.ts
-  var { flux, util } = shelter;
+  var { flux: flux4, util } = shelter;
   var { awaitDispatch } = util;
-  var { awaitStore } = flux;
+  var { awaitStore } = flux4;
   var getUser = async () => {
     const UserStore = await awaitStore("UserStore", true);
     const { getCurrentUser } = UserStore;
@@ -254,19 +326,39 @@
   var noNitroUpsell_default = {
     title: "No Nitro Upsell",
     content: "Remove ALL of Discord's nitro upsells by tricking the client into thinking you have nitro.",
+    start: async () => {
+      const user = await getUser();
+      user._eurotilities__premiumType = user.premiumType;
+      user.premiumType = 2;
+    }
+  };
+
+  // plugins/eurotilities/modules/noReplyMention.ts
+  var { flux: flux5 } = shelter;
+  var { intercept: intercept3 } = flux5;
+  var unintercept = null;
+  var noReplyMention_default = {
+    title: "No Reply Mention",
+    content: "Disable replies by default.",
     start: () => {
-      (async () => {
-        const user = await getUser();
-        user._eurotilities__premiumType = user.premiumType;
-        user.premiumType = 2;
-      })();
+      unintercept = intercept3((dispatch) => {
+        if (dispatch.type !== "CREATE_PENDING_REPLY")
+          return;
+        dispatch.shouldMention = false;
+      });
       return true;
-    },
-    stop: () => {
-      (async () => {
-        const user = await getUser();
-        user.premiumType = user._eurotilities__premiumType;
-      })();
+    }
+  };
+
+  // plugins/eurotilities/modules/noTyping.ts
+  var { http: http3 } = shelter;
+  var { intercept: intercept4 } = http3;
+  var noTyping_default = {
+    title: "No Typing",
+    content: "Stop Discord from sending your typing status.",
+    start: () => {
+      intercept4("post", /.*typing$/, () => {
+      });
       return true;
     }
   };
@@ -279,14 +371,12 @@
       document.hasFocus = () => {
         return false;
       };
-      return true;
-    },
-    stop: () => false
+    }
   };
 
   // plugins/eurotilities/modules/steamStatusSync.ts
-  var { flux: flux2 } = shelter;
-  var { dispatcher } = flux2;
+  var { flux: flux6 } = shelter;
+  var { dispatcher: dispatcher3 } = flux6;
   var statusMap = {
     online: "online",
     idle: "away",
@@ -307,21 +397,53 @@
     title: "Steam Status Sync",
     content: "Sync your Steam Status to your Discord Status.",
     start: () => {
-      dispatcher.subscribe("USER_SETTINGS_PROTO_UPDATE", listener);
-      return true;
-    },
-    stop: () => {
-      dispatcher.unsubscribe("USER_SETTINGS_PROTO_UPDATE", listener);
+      dispatcher3.subscribe("USER_SETTINGS_PROTO_UPDATE", listener);
+    }
+  };
+
+  // plugins/eurotilities/modules/timestampedFiles.ts
+  var { flux: flux7 } = shelter;
+  var { intercept: intercept5 } = flux7;
+  var unintercept2 = null;
+  var timestampedFiles_default = {
+    title: "Timestamped Files",
+    content: "Rename uploaded files to the current timestamp.",
+    start: () => {
+      unintercept2 = intercept5((dispatch) => {
+        if (dispatch?.type === "UPLOAD_ATTACHMENT_ADD_FILES") {
+          for (const { file } of dispatch?.files ?? []) {
+            if (!file?.name)
+              continue;
+            let newFilename = Date.now().toString();
+            if (file.name.includes(".")) {
+              newFilename += file.name.slice(file.name.lastIndexOf("."));
+            }
+            Object.defineProperty(file, "name", {
+              value: newFilename
+            });
+          }
+          return dispatch;
+        }
+      });
       return true;
     }
   };
 
   // plugins/eurotilities/helpers/modules.ts
   var modules_default = {
+    alwaysTrust: alwaysTrust_default,
+    antiTrack: antiTrack_default,
     colorSighted: colorSighted_default,
+    muteNewGuild: muteNewGuild_default,
+    noCallIdle: noCallIdle_default,
+    noConsoleSpam: noConsoleSpam_default,
+    noDevtoolsDetection: noDevtoolsDetection_default,
     noNitroUpsell: noNitroUpsell_default,
+    noReplyMention: noReplyMention_default,
+    noTyping: noTyping_default,
     noTypingAnimation: noTypingAnimation_default,
-    steamStatusSync: steamStatusSync_default
+    steamStatusSync: steamStatusSync_default,
+    timestampedFiles: timestampedFiles_default
   };
 
   // plugins/eurotilities/components/settings.tsx
@@ -329,114 +451,133 @@
   var import_web2 = __toESM(require_web(), 1);
   var import_web3 = __toESM(require_web(), 1);
   var import_web4 = __toESM(require_web(), 1);
-  var _tmpl$ = /* @__PURE__ */ (0, import_web.template)(`<div></div>`, 2);
+  var import_web5 = __toESM(require_web(), 1);
+  var _tmpl$ = /* @__PURE__ */ (0, import_web.template)(`<br>`, 1);
+  var _tmpl$2 = /* @__PURE__ */ (0, import_web.template)(`<div></div>`, 2);
   var {
     plugin: {
       store
     },
     ui: {
+      Header,
+      HeaderTags,
+      Divider,
       SwitchItem,
-      tooltip
+      openModal,
+      ModalRoot,
+      ModalSizes,
+      ModalHeader,
+      ModalBody,
+      ModalConfirmFooter,
+      Button,
+      ButtonLooks,
+      ButtonColors,
+      ButtonSizes
     },
     React
   } = shelter;
   var handleSettingChange = (key, value) => {
     store[key] = value;
   };
+  var camelize = (str) => {
+    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => index === 0 ? word.toLowerCase() : word.toUpperCase()).replace(/\s+/g, "");
+  };
+  var makeModal = () => {
+    const remove = openModal(() => (0, import_web5.createComponent)(ModalRoot, {
+      get size() {
+        return ModalSizes.SMALL;
+      },
+      get children() {
+        return [(0, import_web5.createComponent)(ModalHeader, {
+          close: () => {
+            remove();
+          },
+          children: "\u20ACtilities Settings"
+        }), (0, import_web5.createComponent)(ModalBody, {
+          get children() {
+            return [(0, import_web5.createComponent)(Divider, {
+              mb: true
+            }), (0, import_web4.memo)(() => Object.keys(modules_default).map((module) => {
+              const mod = modules_default[module];
+              return (() => {
+                const _el$ = _tmpl$2.cloneNode(true);
+                (0, import_web3.setAttribute)(_el$, "key", module);
+                (0, import_web2.insert)(_el$, (0, import_web5.createComponent)(SwitchItem, {
+                  get value() {
+                    return store[camelize(module)];
+                  },
+                  onChange: (v) => handleSettingChange(camelize(module), v),
+                  hideBorder: true,
+                  get children() {
+                    return [(0, import_web4.memo)(() => mod.title), _tmpl$.cloneNode(true), (0, import_web4.memo)(() => mod.content)];
+                  }
+                }), null);
+                (0, import_web2.insert)(_el$, (0, import_web5.createComponent)(Divider, {
+                  mb: true
+                }), null);
+                return _el$;
+              })();
+            }))];
+          }
+        }), (0, import_web5.createComponent)(ModalConfirmFooter, {
+          close: () => {
+            remove();
+          },
+          cancelText: "Close",
+          confirmText: "Apply",
+          onConfirm: () => {
+            location.reload();
+          }
+        })];
+      }
+    }));
+  };
   var settings = () => {
-    return [(() => {
-      const _el$ = _tmpl$.cloneNode(true);
-      (0, import_web4.use)(tooltip, _el$, () => "Remove the colorblind-friendly icons from statuses.");
-      (0, import_web2.insert)(_el$, (0, import_web3.createComponent)(SwitchItem, {
-        get value() {
-          return store.colorSighted;
-        },
-        onChange: (v) => handleSettingChange("colorSighted", v),
-        hideBorder: true,
-        children: "Color Sighted"
-      }));
-      return _el$;
-    })(), (() => {
-      const _el$2 = _tmpl$.cloneNode(true);
-      (0, import_web4.use)(tooltip, _el$2, () => "Remove ALL of Discord's nitro upsells by tricking the client into thinking you have nitro.");
-      (0, import_web2.insert)(_el$2, (0, import_web3.createComponent)(SwitchItem, {
-        get value() {
-          return store.noNitroUpsell;
-        },
-        onChange: (v) => handleSettingChange("noNitroUpsell", v),
-        hideBorder: true,
-        children: "No Nitro Upsell"
-      }));
-      return _el$2;
-    })(), (() => {
-      const _el$3 = _tmpl$.cloneNode(true);
-      (0, import_web4.use)(tooltip, _el$3, () => "Disable the CPU-intensive typing dots animation.");
-      (0, import_web2.insert)(_el$3, (0, import_web3.createComponent)(SwitchItem, {
-        get value() {
-          return store.noTypingAnimation;
-        },
-        onChange: (v) => handleSettingChange("noTypingAnimation", v),
-        hideBorder: true,
-        children: "No Typing Animation"
-      }));
-      return _el$3;
-    })(), (() => {
-      const _el$4 = _tmpl$.cloneNode(true);
-      (0, import_web4.use)(tooltip, _el$4, () => "Sync your Steam Status to your Discord Status.");
-      (0, import_web2.insert)(_el$4, (0, import_web3.createComponent)(SwitchItem, {
-        get value() {
-          return store.steamStatusSync;
-        },
-        onChange: (v) => handleSettingChange("steamStatusSync", v),
-        hideBorder: true,
-        children: "Steam Status Sync"
-      }));
-      return _el$4;
-    })()];
+    return (0, import_web5.createComponent)(Button, {
+      get look() {
+        return ButtonLooks.FILLED;
+      },
+      get color() {
+        return ButtonColors.BRAND;
+      },
+      get size() {
+        return ButtonSizes.XLARGE;
+      },
+      onClick: () => {
+        document.querySelector('[aria-label="close modal"]')?.click();
+        document.querySelector('[class^="_mroot_"]')?.classList.add("_active_1dl10_1");
+        makeModal();
+      },
+      style: {
+        width: "100%",
+        height: "100%"
+      },
+      children: "Open Settings"
+    });
   };
 
   // plugins/eurotilities/index.ts
   var {
-    plugin: { store: store2 },
+    plugin: { store: store2, showSettings },
     ui: { showToast }
   } = shelter;
   function onLoad() {
     for (const module of Object.keys(store2)) {
       if (store2[module]) {
-        if (modules_default[module].start()) {
-          showToast({
-            ...modules_default[module],
-            title: `${modules_default[module].title} - Enabled`,
-            content: null,
-            duration: 0
-          });
-        }
+        modules_default[module].start();
       }
     }
+    showSettings();
   }
   function onUnload() {
-    for (const module of Object.keys(store2)) {
-      if (store2[module]) {
-        if (modules_default[module].stop()) {
-          showToast({
-            ...modules_default[module],
-            title: `${modules_default[module].title} - Disabled`,
-            content: null,
-            duration: 0
-          });
-        } else {
-          showToast({
-            ...modules_default[module],
-            title: "Restat Required",
-            content: `${modules_default[module].title} requires a restart to disable.`,
-            onClick() {
-              location.reload();
-            },
-            duration: Number.POSITIVE_INFINITY
-          });
-        }
-      }
-    }
+    showToast({
+      title: "Restart Required",
+      content: "\u20ACtilities requires a restart to disable.",
+      onClick() {
+        location.reload();
+      },
+      duration: Number.POSITIVE_INFINITY
+    });
   }
   return __toCommonJS(eurotilities_exports);
 })();
