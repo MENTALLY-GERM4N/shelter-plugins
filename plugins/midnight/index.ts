@@ -1,7 +1,3 @@
-const {
-	util: { log },
-} = shelter;
-
 export function onLoad() {
 	document.body.classList.add("theme-midnight");
 }
