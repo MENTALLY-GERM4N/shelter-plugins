@@ -41,7 +41,7 @@ export function onLoad() {
 		if (msg.activity?.assets?.large_image.startsWith("https://")) {
 			msg.activity.assets.large_image = `https://images-ext-1.discordapp.net/external/${msg.activity.assets.large_image.replace("https://", "https/")}?format=webp&width=300&height=300`;
 		} else {
-			if (msg.activity?.assets?.large_image)fe
+			if (msg.activity?.assets?.large_image)
 				msg.activity.assets.large_image = await fetchAssetId(
 					msg.activity.application_id,
 					msg.activity.assets.large_image,
