@@ -62,5 +62,5 @@ export function onLoad() {
 		}
 		console.warn(msg);
 		FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", ...msg }); // set RPC statusa
-	})) 
+	}
 }
