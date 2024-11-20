@@ -1,9 +1,12 @@
 {
-	"devDependencies": {
-		"@biomejs/biome": "1.9.2",
-		"@uwu/lune": "^1.4.2",
-		"@uwu/shelter-defs": "^1.4.1"
-	},
-	"type": "module",
-	"workspaces": ["plugins/*"]
+  "devDependencies": {
+    "@biomejs/biome": "1.9.2",
+    "@uwu/lune": "^1.4.2",
+    "@uwu/shelter-defs": "^1.4.1"
+  },
+  "type": "module",
+  "workspaces": ["plugins/*"],
+  "trustedDependencies": [
+    "@biomejs/biome"
+  ]
 }
